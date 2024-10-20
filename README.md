@@ -24,6 +24,10 @@ This project implements a real-time data stream simulator combined with an anoma
 3. **Real-Time Visualization**: 
    - The data stream is visualized in an animated plot using `matplotlib.animation`. 
    - Anomalies are highlighted with red scatter points on the plot, updating in real-time as the data stream progresses.
+  
+## Customization
+- **Smoothing Factor (`beta`)**: Adjusts the sensitivity of the EWMA to new data. A value closer to `1` makes it more responsive to changes, while a value closer to `0` makes it more stable.
+- **Threshold Multiplier**: Adjusts the sensitivity of anomaly detection. Increasing this value will make the system less sensitive to smaller anomalies.
 
 ## Installation
 1. Clone the repository:
