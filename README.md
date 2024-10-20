@@ -13,17 +13,29 @@ This project implements a real-time data stream simulator combined with an anoma
 - `main.py`: Contains the code for data simulation, anomaly detection, and visualization.
 - `requirements.txt`: Specifies the dependencies required to run the project.
 
-## How It Works
-1. **Data Stream**: The `data_stream()` function generates real-time data incorporating:
-   - A seasonal pattern (modeled as a sine wave),
-   - A linear trend, and
-   - Random noise with a chance of introducing anomalies (spikes).
+## Anomaly Detection Algorithm:
 
-2. **Anomaly Detection**: The `anomaly_detection()` function uses the EWMA of the data and its standard deviation to detect anomalies. If the current data point deviates from the expected value by more than a set threshold, it is flagged as an anomaly.
+1. **Data Stream Simulation**:
+   - A real-time data stream is simulated using a combination of **seasonal** (sine wave), **trend** (linear increase), and **noise** (random variations) components.
+   - Periodically, anomalies (large positive or negative spikes) are introduced with a 5% probability to mimic real-world unexpected events.
 
-3. **Real-Time Visualization**: 
-   - The data stream is visualized in an animated plot using `matplotlib.animation`. 
-   - Anomalies are highlighted with red scatter points on the plot, updating in real-time as the data stream progresses.
+2. **EWMA Calculation**:
+   - The anomaly detection uses EWMA to compute a smoothed value (`ewma`) that represents the expected behavior of the data, updating based on the previous values.
+   - The algorithm also calculates the **EWMA standard deviation** (`ewma_std`) to track variability in the data over time.
+
+3. **Anomaly Detection Logic**:
+   - The current data value is compared to the smoothed value and its expected variability (EWMA standard deviation).
+   - If the value deviates from the expected range (determined by the `ewma` and a multiple of the standard deviation, controlled by `threshold_multiplier`), it is flagged as an anomaly.
+   - The detection sensitivity is controlled by `beta`, which determines how much weight is given to recent data versus historical data in the EWMA calculation.
+
+4. **Parameter Validation**:
+   - The algorithm includes checks to ensure the input parameters for anomaly detection (e.g., `beta`, `threshold_multiplier`, `ewma_std`) are valid.
+
+### Effectiveness:
+- **EWMA** is effective for detecting subtle and sudden shifts in data streams while being responsive to changes over time. It is widely used in scenarios where the data exhibits time-dependent patterns with occasional anomalies.
+- By using both the smoothed value and variability (EWMA standard deviation), the algorithm adapts to normal variations in the data, reducing false positives while effectively catching true anomalies.
+- The algorithm's **flexibility** (via parameters like `beta` and `threshold_multiplier`) allows it to be tuned for different data patterns and sensitivities.
+
   
 ## Customization
 - **Smoothing Factor (`beta`)**: Adjusts the sensitivity of the EWMA to new data. A value closer to `1` makes it more responsive to changes, while a value closer to `0` makes it more stable.
